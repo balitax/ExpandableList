@@ -9,22 +9,58 @@
 import UIKit
 
 class ExpandableViewController: UIViewController {
-
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        tableView.contentInset = UIEdgeInsets(top: -60, left: 0, bottom: 0, right: 0)
+        tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableView.automaticDimension
+        
     }
     
+    
+}
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+extension ExpandableViewController: UITableViewDelegate, UITableViewDataSource, ContentsTableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
-    */
-
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell")!
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "labelInfo")!
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ContentsCell", for: indexPath) as! ContentsTableViewCell
+            cell.setupUI()
+            cell.delegate = self
+            return cell
+        default:
+            return UITableViewCell()
+        }
+    }
+    
+    func didShowPaymentInfo(_ height: CGFloat) {
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
+    }
+    
 }
